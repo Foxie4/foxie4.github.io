@@ -5,267 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="shortcut icon" type="image/png" href="/foxie4.github.io/image/fox.ico">    <!--Logo-->
   <title>Foxie</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css?family=Permanent+Marker');
-
-* {
-  box-sizing: border-box;
-}
-
-#app {
-  display: flex;
-  overflow: hidden;
-  position: relative;  
-  width: 100vw;
-  height: 100vh;
-  background-image: linear-gradient(red, orange);
-}
-
-.butter-cheese-eggs {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  flex-wrap: wrap;
-  width: 300px;
-  height: 300px;
-  
-  > div {
-    flex: 0 0 auto;
-    width: 100px;
-    height: 100px;
-    
-    .block {
-      cursor: pointer;
-      display: table-cell;
-      width: 100px;
-      height: 100px;
-      font: bold 50px/0 'Comic Sans MS', sans-serif;
-      vertical-align: middle;
-      text-align: center;
-    }
-    
-    &:nth-child(1),
-    &:nth-child(2),
-    &:nth-child(3),
-    &:nth-child(4),
-    &:nth-child(5),
-    &:nth-child(6) {
-      border-bottom: 3px solid #fff;
-    }
-
-    &:nth-child(2),
-    &:nth-child(5),
-    &:nth-child(8) {
-      border-left: 3px solid #fff;
-      border-right: 3px solid #fff;
-    }
-  }
-  
-  span {
-    display: block;
-  }
-}
-
-.win {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%) rotate(-10deg);
-  transform-origin: 50% 50%;
-  transform-origin: center;
-  width: 300px;
-  height: 300px;
-  margin-top: -60px;
-  margin-left: -20px;
-  padding-top: 140px;
-  font-family: 'Permanent Marker', cursive;
-  text-align: center;
-  
-  h2 {
-    display: block;
-    margin: 0 0 10px;
-    font-size: 100px;
-    text-shadow: 0px 0px 50px white;
-    text-align: center;
-  }
-  
-  button {
-    cursor: pointer;
-    transition: all 200ms cubic-bezier(0.175, 0.885, 0.320, 1.275);
-    outline: none;
-    display: inline-block;
-    padding: 15px;
-    background-color: darkred;
-    border: none;
-    border-radius: 10px;
-    font-family: 'Permanent Marker', cursive;
-    font-size: 20px;
-    color: white;
-    
-    &:hover {
-      transform: scale(1.1);
-    }
-  }
-}
-  </style>
 </head>
-<body>
-  <div id="app">
-    <transition v-on:enter="enter" v-bind:css="false" appear>
-      <div class="butter-cheese-eggs" v-show="true">
-        <div v-for="(block, index) in grid" @click="select(index)">
-          <block :figure.sync="block.figure" />
-        </div>
-      </div>
-    </transition>
-    
-    <transition v-on:enter="enterWin" v-bind:css="false">
-      <win v-show="winner" :click-handler="restart"></win>
-    </transition>
-  </div>
-  
-  <template id="block">
-    <div class="block">
-      <transition v-on:enter="enter" v-bind:css="false">
-        <span v-show="figure > -1">{{ fig }}</span>
-      </transition>
-    </div>
-  </template>
-  
-  <template id="win">
-    <div class="win">
-      <h2>Win</h2>
-      <!--<button @click="clickHandler">Play again</button>-->
-    </div>
-  </template>
-  <script>
-    let state = {
-  grid: _.map(_.range(0, 9), (index) => {
-    return { index, figure: -1 }
-  }),
-  myTurn: false
-}
-
-const appState = _.cloneDeep(state)
-
-const block = Vue.component('block', {
-  name: 'block',
-  
-  template: '#block',
-  
-  props: {
-    figure: {
-      type: Number,
-      default: -1
-    }
-  },
-  
-  computed: {
-    fig () {
-      return this.figure === 0 ? 'O' : 'X'
-    }
-  },
-  
-  data () {
-    return {
-      selected: false
-    }
-  },
-  
-  methods: {
-    enter (el, done) {
-      TweenMax.from(el, 1, {
-        autoAlpha: 0,
-        scale: 0,
-        ease: Elastic.easeOut.config(1.25, 0.5),
-        onComplete: done
-      })
-    }
+<style>
+  body{
+margin: 2%;
+text-align: center;
   }
-}) 
-
-const win = Vue.component('win', {
-  name: 'win',
-  template: '#win',
-  props: {
-    clickHandler: {
-      type: Function,
-      default: null
-    }
+  .content{
+border-radius:4px ;
+padding: 15px;
   }
-})
-
-const app = new Vue({
-  name: 'app',
-  
-  el: '#app',
-  
-  data() {
-    return state
-  },
-  
-  components: {
-    block
-  },
-  
-  computed: {
-     winner () {
-       const wins = ['012', '036', '345', '147', '258', '678','048', '246']
-       const grid = this.grid
-       const player = this.myTurn ? 0 : 1
-       const moves = _.reduce(this.grid, (result, value, index) => {
-         if (value.figure === player) {
-           result.push(index)
-         }
-         
-         return result
-       }, [])
-       
-       return !!_.find(wins, win => {
-          const combination = _.map(win.split(''), n => parseInt(n));
-          console.log('combination', combination, moves)
-         
-          return _.difference(combination, moves).length === 0;
-       })
-     }
-  },
-  
-  methods: {
-    select (index) {
-      const {figure} = this.grid[index]
-      
-      if (figure > -1) {
-        return;
-      }
-      
-      this.grid[index].figure = this.myTurn ? 1 : 0
-      this.myTurn = !this.myTurn
-    },
-    
-    restart () {
-      this.grid = appState.grid
-      this.myTurn = appState.myTurn
-    },
-    
-    enter (el, done) {
-      TweenMax.from(el, 1, {
-        autoAlpha: 0,
-        scale: 0,
-        ease: Elastic.easeOut.config(1.25, 0.5)
-      })
-    },
-    
-    enterWin (el) {
-      TweenMax.from(el, 1, {
-        autoAlpha: 0,
-        scale: 0,
-        ease: Elastic.easeOut.config(1.25, 0.5)
-      })
-    }
+  #button{
+    border: none;
+    padding: 10px;
+    cursor: pointer;
   }
-})
-  </script>
+  #button:hover{
+    border: solid 1px black;
+    border-radius: 3px;
+  }
+</style>
+<body id="top"> 
+  <h1 style="text-align: center;">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Temporibus, modi!</h1>
+<p class="content"style="font-size: large; border: black solid 2px;">Lorem ipsum, dolor sit amet consectetur adipisicing elit. A iusto, non iure consectetur temporibus minima tempore tenetur ratione nisi, cumque quibusdam culpa! Porro alias fugiat aperiam repudiandae doloribus quod doloremque. Tenetur sunt accusamus aliquid? Temporibus distinctio aliquam blanditiis tenetur earum iure, odit, quidem quaerat numquam tempora, velit aut corporis excepturi placeat sequi sapiente voluptas voluptatem magni deleniti rerum. Laudantium atque eius nobis optio hic fugit fugiat sapiente rerum, similique animi provident cupiditate voluptate repudiandae dolor! Laborum veritatis minus commodi laboriosam incidunt unde. Atque iste amet, eum sunt velit aspernatur accusantium, blanditiis eveniet ullam, repudiandae facilis nisi perferendis recusandae autem debitis molestiae assumenda tempore sit. Distinctio minus aperiam vitae sit repellendus labore quasi impedit incidunt, ad officia ducimus molestiae numquam dolores. Voluptates eos quaerat veniam veritatis ad obcaecati ut alias perferendis maiores cumque excepturi iusto incidunt sequi, repudiandae nihil quisquam officiis fuga quas accusantium rerum blanditiis eaque modi laborum! Earum accusamus molestias quaerat minus quasi repellendus, esse pariatur fugiat ducimus accusantium consequuntur laudantium nulla doloremque impedit quae explicabo autem odio rem amet. Odit id aliquid atque, tempora eum nulla facere nihil cum numquam fuga ipsa dolorem dolores error doloremque, porro adipisci? Sit quam, ipsa ad atque tenetur magni deserunt praesentium nulla laborum autem est hic, magnam reiciendis explicabo animi laboriosam quaerat consectetur alias repudiandae odit corrupti porro? Debitis illum quaerat aliquam ipsum, quam nemo modi quia voluptas iste voluptatibus deserunt tempore inventore sed ad saepe itaque at sequi ab repellendus. Quod, maiores saepe? Magnam, maxime fugiat. Explicabo sit odio, sunt maiores nemo quaerat debitis libero neque laborum quasi quod quo facere tempora dolor quibusdam quisquam ducimus non a voluptatibus eius tempore, vel doloremque dolorum aliquam. Temporibus quis quia maxime. Sit mollitia, perferendis tenetur unde soluta incidunt ea maiores nulla excepturi et. Fugiat harum iusto a ducimus obcaecati pariatur, velit in deserunt quas laboriosam et eaque cum excepturi? Ex exercitationem aspernatur numquam, itaque tenetur quod dolore iusto? Molestias dolorum, doloremque veniam consectetur sequi vitae totam debitis quasi tenetur perspiciatis cupiditate fugit ex cumque natus, excepturi, consequuntur officiis distinctio voluptates? Sunt saepe rem aut necessitatibus fuga dolore incidunt, magnam error natus quisquam doloribus, ab, exercitationem labore. Cum obcaecati officiis quia fugiat, in rem quo facilis rerum blanditiis, exercitationem dolore, neque maiores adipisci! Sed perspiciatis voluptate maxime rerum similique libero consectetur pariatur? Obcaecati nostrum minima quis repellendus dicta dolorem odio quisquam dolor enim necessitatibus illo nobis, quia tempore iure beatae esse inventore incidunt accusantium laudantium aliquam. Necessitatibus numquam fugiat, facilis obcaecati dignissimos quas minus. Quidem non quaerat officiis tenetur odio eos libero repellendus expedita dolorem quia accusantium at ab vero iusto voluptatem eveniet molestias dignissimos neque consectetur, nulla nesciunt. Placeat, in culpa nulla sit deserunt, commodi expedita fugit laudantium, perspiciatis voluptates aliquam soluta atque eos optio. Id aliquid impedit eveniet magni ratione tempore velit eius dolorem fuga dolores molestias quam perspiciatis modi nisi, aspernatur quaerat molestiae debitis, harum cupiditate nemo! Ad blanditiis hic nesciunt, pariatur consectetur neque, a quia, voluptatem sapiente quod eveniet quisquam excepturi nihil. Itaque hic sapiente sit sunt reiciendis, vel facere id quisquam temporibus, cumque repellendus cupiditate in enim ipsum, laborum odit voluptatem alias consequatur laudantium. Modi quibusdam recusandae quas praesentium exercitationem nam provident, saepe suscipit, distinctio nihil maiores ipsa vel sunt amet ullam perferendis consequatur atque et asperiores dolorum cupiditate aliquid hic libero unde? Ducimus magnam esse facere a, ipsum officia molestias unde vitae. Aperiam error veritatis nobis unde eveniet placeat beatae dolorum rem. Nulla iusto voluptas ullam similique enim, reprehenderit deserunt ut sequi aliquam quo id temporibus hic qui, provident earum! Officia repudiandae praesentium necessitatibus laboriosam vel saepe rerum dignissimos quae odio aperiam cum error sapiente omnis aliquam, amet at quam nemo ipsam dolorem, illum nulla voluptatum! Temporibus eveniet amet nesciunt accusantium quos iste iure fuga tempore deleniti laboriosam, numquam minima aliquam dolorem reprehenderit magni molestias hic aliquid laudantium. Ipsa dicta nam iusto officia eaque, eveniet delectus! Mollitia porro, fugiat a earum atque saepe eos totam, enim vel consequuntur quos? Adipisci nesciunt, eius distinctio sit minus, reprehenderit in modi expedita dolorum animi explicabo eos laborum sint! In dolorem voluptatem aperiam ullam modi est, voluptatum nesciunt itaque iusto dignissimos molestiae rem, voluptates tempora sunt, similique distinctio illum. Nisi necessitatibus vero odio facere, eaque a perspiciatis impedit atque optio molestiae id aspernatur ea itaque vitae mollitia architecto nihil, temporibus laboriosam nemo quibusdam odit pariatur velit eum error. Ratione aspernatur corrupti delectus aut architecto dolores dolorum minus et distinctio possimus culpa facilis harum impedit vero tempora esse, quidem earum quam tenetur ea sed consectetur necessitatibus ad soluta. Assumenda, doloremque itaque nesciunt quia, molestias tempore nulla ullam mollitia rem adipisci alias fugit cumque hic cupiditate aperiam. Suscipit quod alias dolores, exercitationem blanditiis iusto sunt est porro cum non sequi ipsum ratione maxime distinctio commodi minima necessitatibus autem? Commodi maxime saepe officiis doloremque dignissimos dolor consequuntur quidem suscipit harum quae iure ea possimus distinctio vitae repudiandae reiciendis repellendus laboriosam corrupti illum corporis asperiores, voluptas aut unde debitis. Laboriosam, ipsum quasi atque ab excepturi dignissimos neque aliquid. Omnis excepturi impedit neque quia nostrum nobis iusto porro sit explicabo inventore debitis quidem eius, quas praesentium enim dolore saepe tempora iure dicta. Commodi dolorum, labore iste tenetur quia maxime! Sunt amet corrupti animi molestiae ad molestias rerum quisquam, nam similique, autem omnis sint nesciunt laboriosam dicta vitae. Quidem doloremque voluptatem sunt ad, autem a laboriosam mollitia qui quae excepturi similique modi facilis, eaque corrupti culpa ut numquam harum iure distinctio reprehenderit adipisci. Omnis, accusantium illo libero optio magnam odit totam dolorum maiores nisi sint rem sapiente laudantium fugit dolore soluta ipsum sed neque nesciunt veniam alias suscipit quisquam nostrum! Error, eos eum non similique obcaecati eveniet veritatis, impedit cumque labore cum natus facere excepturi iure a illum? Explicabo vitae voluptate eos, voluptatibus saepe magnam aperiam ratione nulla ea esse. Explicabo consectetur suscipit, voluptatum dolorum distinctio provident aperiam maxime blanditiis, laborum porro fugit quia aspernatur dolore quod dicta sunt culpa dolor laboriosam sequi commodi deleniti praesentium rerum excepturi minus. Expedita officiis id, cum nobis quam magni iusto magnam similique. Quis aperiam provident molestias dolor ut libero! Deserunt, corrupti.</p>
+<a href="#top"><button id="button">Эхлэл рүү буцах</button></a>
 </body>
 </html>
