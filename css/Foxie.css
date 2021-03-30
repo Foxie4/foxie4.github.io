@@ -6,7 +6,7 @@
   font-family: "Poppins", sans-serif;
 }
 body {
-  background: #000;
+  background: #121711;
   min-height: 200vh;
 }
 header {
@@ -58,6 +58,6 @@ header ul li a {
   position: relative;
   width: 100%;
   height: 100vh;
-  background: url(/foxie4.github.io/image/black-1072366_1280.jpg);
+  background: url(/foxie4.github.io/image/elliott-engelmann-DjlKxYFJlTc-unsplash.jpg);
   background-size: cover;
 }
