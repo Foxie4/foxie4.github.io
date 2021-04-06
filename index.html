@@ -1,77 +1,69 @@
-
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>Foxie's Site</title>
-    <link rel="stylesheet" href="../../../css/styles.css">
-    <link rel="shortcut icon" type="image/png" href="/foxie4.github.io/image/fox.ico">    <!--Logo-->
-    <link rel="stylesheet" href="/css/button.css">
-  </head>
-  <body oncontextmenu="return false">
-<!-- Load Facebook SDK for JavaScript -->
-<div id="fb-root"></div>
-<script>
-  window.fbAsyncInit = function() {
-    FB.init({
-      xfbml            : true,
-      version          : 'v9.0'
-    });
-  };
-
-  (function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-
-<!-- Your Chat Plugin code -->
-<div class="fb-customerchat"
-  attribution="setup_tool"
-  page_id="100510368708169"
-logged_in_greeting="Сайн уу? ヾ(•ω•`)o"
-logged_out_greeting="Сайн уу? ヾ(•ω•`)o">
-</div>
-    <div class="wrapper">
-      <div class="display">
-        <div id="time">
-</div>
-</div>
-<span></span>
-      <span></span> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" type="image/png" href="/foxie4.github.io/image/icon.ico">
+  <link rel="stylesheet" href="/foxie4.github.io/css/index.css">
+  <script src="/foxie4.github.io/Javascript/search.js"></script>
+  <title>Foxie</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+ <!-- Navbar -->
+ <section class="navigation">
+  <div class="nav-container">
+    <div class="brand">
+      <a href="#!">Logo</a>
     </div>
-    <a href="/foxie4.github.io/Foxie.html" target="_blank">
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span> 
-      Foxie
-    </a><script>
-      setInterval(()=>{
-        const time = document.querySelector(".display #time");
-        let date = new Date();
-        let hours = date.getHours();
-        let minutes = date.getMinutes();
-        let seconds = date.getSeconds();
-        let day_night = "AM";
-        if(hours > 12){
-          day_night = "PM";
-          hours = hours - 12;
-        }
-        if(seconds < 10){
-          seconds = "0" + seconds;
-        }
-        if(minutes < 10){
-          minutes = "0" + minutes;
-        }
-        if(hours < 10){
-          hours = "0" + hours;
-        }
-        time.textContent = hours + ":" + minutes + ":" + seconds + " "+ day_night;
-      });
-    </script>
-
-  </body>
+    <nav>
+      <div class="nav-mobile"><a id="navbar-toggle" href="#!"><span></span></a></div>
+      <ul class="nav-list">
+        <li>
+          <a href="#!">Home</a>
+        </li>
+        <li>
+          <a href="#!">About</a>
+        </li>
+        <li>
+          <a href="#!">Services</a>
+          <ul class="navbar-dropdown">
+            <li>
+              <a href="#!">Sass</a>
+            </li>
+            <li>
+              <a href="#!">Less</a>
+            </li>
+            <li>
+              <a href="#!">Stylus</a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="#!">Portfolio</a>
+        </li>
+        <li>
+          <a href="#!">Category</a>
+          <ul class="navbar-dropdown">
+            <li>
+              <a href="#!">Sass</a>
+            </li>
+            <li>
+              <a href="#!">Less</a>
+            </li>
+            <li>
+              <a href="#!">Stylus</a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="#!">Contact</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</body>
 </html>
