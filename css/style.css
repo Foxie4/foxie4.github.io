@@ -284,7 +284,7 @@ html[data-w-dynpage] [data-w-cloak] {
   bottom: auto;
   z-index: auto;
   display: block;
-  visibility: hidden;
+  visibility: visible;
   overflow: visible;
   overflow-x: visible;
   overflow-y: visible;
@@ -1320,7 +1320,7 @@ textarea.w-select {
   text-indent: 0;
   text-shadow: none;
   text-transform: none;
-  visibility: hidden;
+  visibility: visible;
   white-space: normal;
   word-break: normal;
   word-spacing: normal;
