@@ -26,6 +26,31 @@
         <link href="/image/icon.ico" rel="apple-touch-icon"/>
     </head>
     <body class="body">
+        <!-- Fb chat plugin START -->
+        <!-- Load Facebook SDK for JavaScript -->
+      <div id="fb-root"></div>
+      <script>
+        window.fbAsyncInit = function() {
+          FB.init({
+            xfbml            : true,
+            version          : 'v10.0'
+          });
+        };
+
+        (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));</script>
+
+      <!-- Your Chat Plugin code -->
+      <div class="fb-customerchat"
+        attribution="setup_tool"
+        page_id="100510368708169">
+      </div>
+        <!-- Fb chat plugin END -->
         <div data-collapse="medium" data-animation="default" data-duration="400" role="banner" class="navbar-2 w-nav">
             <div class="w-container">
                 <nav role="navigation" class="nav-menu w-nav-menu">
